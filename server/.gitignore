@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Environment (never commit real secrets)
+.env
+.env.*
+!.env.example
+
+# Uploads (runtime files)
+uploads/*
+!uploads/.gitkeep
+!uploads/damage-images/.gitkeep
+
+# Logs / coverage
+*.log
+npm-debug.log*
+coverage/
+
+# OS / editor
+.DS_Store
+Thumbs.db

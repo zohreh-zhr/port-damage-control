@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Priority {
+  normal
+  warning
+  medium
+  critical
+}
+
+enum ReportStatus {
+  PENDING_TECH_REVIEW @map("در انتظار بررسی فنی")
+  IN_REPAIR           @map("در حال تعمیر")
+  RESOLVED            @map("رفع شده")
+}
+
+model DamageReport {
+  id            String       @id @default(uuid()) @db.Uuid
+  trackingCode  String       @unique @map("tracking_code") @db.VarChar(32)
+  title         String       @db.VarChar(100)
+  description   String       @db.Text
+  location      String       @db.VarChar(120)
+  priority      Priority     @default(normal)
+  status        ReportStatus @default(PENDING_TECH_REVIEW)
+  imageName     String?      @map("image_name") @db.VarChar(255)
+  imagePath     String?      @map("image_path") @db.VarChar(512)
+  imageMimeType String?      @map("image_mime_type") @db.VarChar(100)
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([priority])
+  @@index([location])
+  @@index([createdAt])
+  @@map("damage_reports")
+}
