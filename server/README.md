@@ -1,88 +1,179 @@
-# Port Damage Control — Backend (`server/`)
+# Port Damage Reporting System
 
-Backend API برای داشبورد ثبت و پیگیری خرابی‌های بندری. این سرویس با فرانت‌اند Vue/Quasar موجود هماهنگ است و داده‌ها را در PostgreSQL نگه می‌دارد.
+A full-stack web application for submitting, managing, and tracking port damage reports.
 
-## تکنولوژی‌ها
-- Node.js (ES Modules) + Express
-- PostgreSQL + Prisma
-- Zod (اعتبارسنجی)، Multer (آپلود تصویر)، Helmet + CORS (امنیت پایه)
-- `dotenv` برای تنظیمات محیطی (بدون هاردکد secret)
+## Technologies
 
-## پیش‌نیازها
-- Node.js `>= 20` و npm
-- PostgreSQL در دسترس + یک دیتابیس ایجادشده
+### Frontend
+- Vue 3
+- Quasar
+- Pinia
+- Vite
 
-## نصب
-```powershell
-cd server
-npm install express cors dotenv zod multer @prisma/client helmet
-npm install -D prisma
-```
+### Backend
+- Node.js
+- Express.js
+- Prisma ORM
+- PostgreSQL
+- Zod
+- Multer
 
-## تنظیم `.env`
-1. از `.env.example` یک `.env` بسازید:
-   ```powershell
-   copy .env.example .env
-   ```
-2. مقادیر واقعی را **فقط در `.env`** قرار دهید (commit نکنید). مهم‌ترین مقدار:
-   - `DATABASE_URL` اتصال PostgreSQL شما
+## Features
 
-نمونه کلیدها: `NODE_ENV`, `PORT`, `DATABASE_URL`, `CORS_ORIGIN`, `UPLOAD_DIR`, `MAX_FILE_SIZE_BYTES`.
+- Submit new port damage reports
+- Upload images with damage reports
+- View and filter damage reports
+- Track reports using tracking codes
+- Update report statuses
+- Delete reports
+- View damage report statistics
+- Validate incoming data
+- Secure API with Helmet and CORS
 
-## دیتابیس (Prisma)
-پس از آماده بودن PostgreSQL و تنظیم `DATABASE_URL`:
-```powershell
-cd server
-npm run prisma:generate
-npm run prisma:migrate
-```
-> اگر PostgreSQL آماده نبود، Migration واقعی را اجرا نکنید.
+## Project Structure
 
-## اجرای سرور
-```powershell
-cd server
-npm run dev   # توسعه (watch)
-npm start     # اجرا
-```
-سلامت سرویس: `GET /health` → `{ "status": "ok" }`
-
-## APIها (پیشوند `/api/reports`)
-| متد | مسیر | توضیح |
-|---|---|---|
-| GET | `/api/reports` | فهرست گزارش‌ها (فیلتر اختیاری: `status`, `priority`, `location`, `trackingCode`, `search`) — آرایه JSON |
-| POST | `/api/reports` | ثبت گزارش + تولید کد پیگیری یکتا؛ `multipart/form-data`، فیلد تصویر اختیاری: `image` (<=2MB، فقط تصویر) |
-| GET | `/api/reports/:id` | دریافت یک گزارش |
-| PATCH | `/api/reports/:id/status` | تغییر وضعیت؛ بدنه: `{ "status": "در حال تعمیر" | "رفع شده" | "در انتظار بررسی فنی" }` |
-| DELETE | `/api/reports/:id` | حذف گزارش و فایل تصویر مرتبط (در صورت وجود) |
-
-**هماهنگی با فرانت:** مقادیر `status` و `priority` و `location` دقیقاً مطابق مقادیر واقعی فرانت‌اند است. `priority=medium` برای سازگاری پذیرفته و به `warning` نرمال می‌شود (رفتار فعلی store).
-
-**تصویر:** در سرور ذخیره می‌شود (`UPLOAD_DIR`) و از `/uploads/...` سرو می‌شود؛ پاسخ شامل `imageName/imageMimeType/imageDataUrl` است (مسیر داخلی فایل روی دیسک یعنی `imagePath` در پایگاه داده نگهداری می‌شود اما در پاسخ API ارائه نمی‌شود).
-
-## کدهای خطا
-- `400` داده نامعتبر/شناسه نامعتبر
-- `404` گزارش/مسیر یافت نشد
-- `413` حجم فایل بیش از 2MB
-- `415` فرمت تصویر نامجاز
-- `409` تداخل یکتا (نادر)
-- `500` خطای داخلی/DB
-
-## ساختار فایل‌ها (خلاصه)
 ```text
-server/
-  prisma/schema.prisma
-  src/
-    app.js, server.js
-    config/ (env, cors, upload, database)
-    constants/ validators/
-    middleware/ (validate, uploadImage, errorHandler)
-    routes/ controllers/ services/ models/
-    utils/ (ApiError, asyncHandler, response)
-  uploads/ (runtime)
-  tests/ (اسکلت)
-  .env.example, .gitignore, package.json
+port-damage-control/
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   ├── stores/
+│   └── styles/
+├── server/
+│   ├── prisma/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   └── validators/
+│   └── tests/
+├── package.json
+└── README.md
 ```
 
-## نکات
-- فایل‌های فرانت‌اند تغییر نکرده‌اند. اتصال فرانت به این API نیازمند تغییر جداگانه (با تأیید) در store/Vite proxy یا `baseURL` است.
-- `server/.env` و فایل‌های `uploads/` نباید commit شوند.
+## Requirements
+
+- Node.js 20 or later
+- npm
+- PostgreSQL
+
+## Installation and Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/zohreh-zhr/port-damage-control.git
+cd port-damage-control
+```
+
+### 2. Install frontend dependencies
+
+```bash
+npm install
+```
+
+### 3. Install backend dependencies
+
+```bash
+cd server
+npm install
+```
+
+### 4. Configure environment variables
+
+Create a `.env` file inside the `server` directory using `.env.example` as a template.
+
+Configure your PostgreSQL connection:
+
+```env
+NODE_ENV=development
+PORT=3000
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DB_NAME?schema=public"
+CORS_ORIGIN=http://localhost:5173
+UPLOAD_DIR=uploads/damage-images
+MAX_FILE_SIZE_BYTES=2097152
+```
+
+Replace the database connection placeholders with your own PostgreSQL credentials and database name.
+
+### 5. Set up the database
+
+Make sure PostgreSQL is running and the database exists.
+
+Run:
+
+```bash
+npm run prisma:migrate
+npm run prisma:generate
+```
+
+### 6. Start the backend
+
+From the `server` directory:
+
+```bash
+npm run dev
+```
+
+The backend runs at:
+
+`http://localhost:3000`
+
+Health check:
+
+`http://localhost:3000/health`
+
+### 7. Start the frontend
+
+Open a second terminal in the project root:
+
+```bash
+npm run dev
+```
+
+Open the local URL displayed by Vite, usually:
+
+`http://localhost:5173`
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/reports` | Get reports |
+| POST | `/api/reports` | Create a report |
+| GET | `/api/reports/:id` | Get a report by ID |
+| PATCH | `/api/reports/:id/status` | Update report status |
+| DELETE | `/api/reports/:id` | Delete a report |
+
+## Testing
+
+Backend tests:
+
+```bash
+cd server
+npm test
+```
+
+Frontend API client tests are located in:
+
+`src/services/__tests__/reportsApi.test.mjs`
+
+## Security
+
+- Real environment variables and credentials must never be committed.
+- The `.env.example` file contains placeholder values only.
+- Uploaded runtime files and dependencies are excluded from Git.
+
+## Author
+
+GitHub: [zohreh-zhr](https://github.com/zohreh-zhr)
+
+## License
+
+This project was developed as an educational project.
