@@ -1,16 +1,16 @@
-# Port Damage Reporting System
+# سامانه ثبت و پیگیری گزارش‌های خسارت بندری
 
-A full-stack web application for submitting, managing, and tracking port damage reports.
+یک برنامه وب تمام‌سِت (Full-Stack) برای ثبت، مدیریت و پیگیری گزارش‌های خسارت و آسیب‌های بندری.
 
-## Technologies
+## فناوری‌های استفاده‌شده
 
-### Frontend
+### فرانت‌اند (Frontend)
 - Vue 3
 - Quasar
 - Pinia
 - Vite
 
-### Backend
+### بک‌اند (Backend)
 - Node.js
 - Express.js
 - Prisma ORM
@@ -18,19 +18,19 @@ A full-stack web application for submitting, managing, and tracking port damage 
 - Zod
 - Multer
 
-## Features
+## امکانات پروژه
 
-- Submit new port damage reports
-- Upload images with damage reports
-- View and filter damage reports
-- Track reports using tracking codes
-- Update report statuses
-- Delete reports
-- View damage report statistics
-- Validate incoming data
-- Secure API with Helmet and CORS
+- ثبت گزارش جدید خسارت بندری
+- بارگذاری تصویر همراه با گزارش خسارت
+- مشاهده و فیلتر کردن گزارش‌ها
+- پیگیری گزارش‌ها از طریق کد رهگیری
+- تغییر وضعیت گزارش‌ها
+- حذف گزارش‌ها
+- مشاهده آمار گزارش‌های خسارت
+- اعتبارسنجی اطلاعات ورودی
+- ایمن‌سازی API با استفاده از Helmet و CORS
 
-## Project Structure
+## ساختار پروژه
 
 ```text
 port-damage-control/
@@ -57,39 +57,41 @@ port-damage-control/
 └── README.md
 ```
 
-## Requirements
+## پیش‌نیازهای اجرای پروژه
 
-- Node.js 20 or later
+برای اجرای پروژه به موارد زیر نیاز دارید:
+
+- Node.js نسخه ۲۰ یا بالاتر
 - npm
 - PostgreSQL
 
-## Installation and Setup
+## نصب و راه‌اندازی پروژه
 
-### 1. Clone the repository
+### ۱. دریافت پروژه
 
 ```bash
 git clone https://github.com/zohreh-zhr/port-damage-control.git
 cd port-damage-control
 ```
 
-### 2. Install frontend dependencies
+### ۲. نصب وابستگی‌های فرانت‌اند
 
 ```bash
 npm install
 ```
 
-### 3. Install backend dependencies
+### ۳. نصب وابستگی‌های بک‌اند
 
 ```bash
 cd server
 npm install
 ```
 
-### 4. Configure environment variables
+### ۴. تنظیم متغیرهای محیطی
 
-Create a `.env` file inside the `server` directory using `.env.example` as a template.
+در پوشه `server`، با استفاده از فایل `.env.example` یک فایل جدید با نام `.env` ایجاد کنید.
 
-Configure your PostgreSQL connection:
+اطلاعات اتصال به PostgreSQL را در آن تنظیم کنید:
 
 ```env
 NODE_ENV=development
@@ -100,80 +102,80 @@ UPLOAD_DIR=uploads/damage-images
 MAX_FILE_SIZE_BYTES=2097152
 ```
 
-Replace the database connection placeholders with your own PostgreSQL credentials and database name.
+مقادیر نمونه اتصال به دیتابیس را با اطلاعات واقعی PostgreSQL خود جایگزین کنید.
 
-### 5. Set up the database
+### ۵. راه‌اندازی دیتابیس
 
-Make sure PostgreSQL is running and the database exists.
+مطمئن شوید PostgreSQL در حال اجراست و دیتابیس موردنظر را ایجاد کرده‌اید.
 
-Run:
+سپس دستورهای زیر را اجرا کنید:
 
 ```bash
 npm run prisma:migrate
 npm run prisma:generate
 ```
 
-### 6. Start the backend
+### ۶. اجرای بک‌اند
 
-From the `server` directory:
+از داخل پوشه `server` دستور زیر را اجرا کنید:
 
 ```bash
 npm run dev
 ```
 
-The backend runs at:
+آدرس بک‌اند:
 
 `http://localhost:3000`
 
-Health check:
+برای بررسی سلامت سرور، این آدرس را باز کنید:
 
 `http://localhost:3000/health`
 
-### 7. Start the frontend
+### ۷. اجرای فرانت‌اند
 
-Open a second terminal in the project root:
+یک ترمینال جدید در پوشه اصلی پروژه باز کنید و دستور زیر را اجرا کنید:
 
 ```bash
 npm run dev
 ```
 
-Open the local URL displayed by Vite, usually:
+آدرس محلی نمایش‌داده‌شده توسط Vite را باز کنید. این آدرس معمولاً به شکل زیر است:
 
 `http://localhost:5173`
 
-## API Endpoints
+## مسیرهای API
 
-| Method | Endpoint | Description |
+| روش درخواست | مسیر | توضیحات |
 |---|---|---|
-| GET | `/api/reports` | Get reports |
-| POST | `/api/reports` | Create a report |
-| GET | `/api/reports/:id` | Get a report by ID |
-| PATCH | `/api/reports/:id/status` | Update report status |
-| DELETE | `/api/reports/:id` | Delete a report |
+| GET | `/api/reports` | دریافت فهرست گزارش‌ها |
+| POST | `/api/reports` | ثبت گزارش جدید |
+| GET | `/api/reports/:id` | دریافت یک گزارش بر اساس شناسه |
+| PATCH | `/api/reports/:id/status` | تغییر وضعیت گزارش |
+| DELETE | `/api/reports/:id` | حذف گزارش |
 
-## Testing
+## اجرای تست‌ها
 
-Backend tests:
+برای اجرای تست‌های بک‌اند:
 
 ```bash
 cd server
 npm test
 ```
 
-Frontend API client tests are located in:
+تست‌های مربوط به API فرانت‌اند در مسیر زیر قرار دارند:
 
 `src/services/__tests__/reportsApi.test.mjs`
 
-## Security
+## نکات امنیتی
 
-- Real environment variables and credentials must never be committed.
-- The `.env.example` file contains placeholder values only.
-- Uploaded runtime files and dependencies are excluded from Git.
+- اطلاعات محرمانه و متغیرهای واقعی محیطی نباید در گیت‌هاب قرار بگیرند.
+- فایل `.env.example` فقط شامل مقادیر نمونه و غیرمحرمانه است.
+- فایل‌های آپلودشده در زمان اجرا و وابستگی‌های پروژه از Git مستثنا شده‌اند.
 
-## Author
+## توسعه‌دهنده
 
 GitHub: [zohreh-zhr](https://github.com/zohreh-zhr)
 
-## License
+## مجوز و توضیحات
 
-This project was developed as an educational project.
+این پروژه با هدف آموزشی و به‌عنوان یک پروژه درسی توسعه داده شده است.
